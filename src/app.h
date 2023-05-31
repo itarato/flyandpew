@@ -3,16 +3,21 @@
 #include <raylib.h>
 
 #include "config.h"
+#include "player.h"
 
 struct App {
+  Player player{};
+
   App() {}
 
-  void init(Config conf) {
+  void init() {
     int win_flags = FLAG_VSYNC_HINT | FLAG_MSAA_4X_HINT;
     SetConfigFlags(win_flags);
 
-    InitWindow(conf.win_w, conf.win_h, "Fly & Pew");
-    SetTargetFPS(conf.fps);
+    InitWindow(config.win_w, config.win_h, "Fly & Pew");
+    SetTargetFPS(config.fps);
+
+    player.reset();
   }
 
   void run() {
@@ -31,7 +36,10 @@ struct App {
     }
   }
 
-  void handle_state() {}
+  void handle_state() { player.update(); }
 
-  void draw() {}
+  void draw() {
+    player.draw();
+    DrawFPS(4, 4);
+  }
 };

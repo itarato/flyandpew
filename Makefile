@@ -20,3 +20,9 @@ executable: $(OBJ)
 clean:
 	rm -f ./src/*.o
 	rm -f ./$(BIN)
+
+run: clean all
+	LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib ./main
+
+rebuild: clean
+rebuild: all
