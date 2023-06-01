@@ -24,4 +24,12 @@ struct Input {
 
     return 0.0;
   }
+
+  const bool fire() {
+    if (IsKeyPressed(KEY_SPACE)) {
+      return true;
+    }
+
+    return false;
+  }
 };
