@@ -19,7 +19,7 @@ struct Player : Entity {
   const int width{60};
   const int height{60};
   Input input{};
-  vector<unique_ptr<UIElement>> bullets;
+  vector<unique_ptr<UIElement>> bullets{};
 
   Player() : Entity() { reset(); }
 

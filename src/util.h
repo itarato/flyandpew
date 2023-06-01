@@ -32,3 +32,12 @@ void remove_inactive(vector<unique_ptr<T>>& items) {
                         [](const auto& e) { return !e.get()->active; }),
               items.end());
 }
+
+struct Ticker {
+  uint64_t ticker{0};
+
+  Ticker() {}
+
+  void tick() { ticker++; }
+  void reset() { ticker = 0; }
+};

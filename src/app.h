@@ -3,10 +3,12 @@
 #include <raylib.h>
 
 #include "config.h"
+#include "enemy.h"
 #include "player.h"
 
 struct App {
   Player player{};
+  EnemyManager enemy_manager{};
 
   App() {}
 
@@ -36,10 +38,15 @@ struct App {
     }
   }
 
-  void handle_state() { player.update(); }
+  void handle_state() {
+    player.update();
+    enemy_manager.update();
+  }
 
   void draw() {
     player.draw();
+    enemy_manager.draw();
+
     DrawFPS(4, 4);
   }
 };

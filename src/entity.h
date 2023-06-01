@@ -12,4 +12,6 @@ struct Entity : UIElement {
   Entity() : UIElement() {}
   Entity(Vector2 dim, Vector2 pos, Vector2 v)
       : UIElement(), dim(dim), pos(pos), v(v){};
+
+  virtual ~Entity() {}
 };
