@@ -24,6 +24,10 @@ struct Player : Entity {
   void reset() {
     pos.x = GetScreenWidth() >> 1;
     pos.y = GetScreenHeight() >> 1;
+    v.x = 0.0;
+    v.y = 0.0;
+    bullets.clear();
+    active = true;
   }
 
   Rectangle frame() const {

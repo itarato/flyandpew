@@ -9,12 +9,12 @@
 
 using namespace std;
 
-struct BaseEnemy : Entity {
-  BaseEnemy()
+struct Enemy : Entity {
+  Enemy()
       : Entity(Vector2{60.0, 40.0}, Vector2{GetScreenWidth() / 2.0f, 0.0},
                Vector2{0.0, 2.0}) {}
 
-  ~BaseEnemy() {}
+  ~Enemy() {}
 
   Rectangle frame() const {
     return Rectangle{pos.x - (dim.x / 2), pos.y - (dim.y / 2), dim.x, dim.y};
@@ -32,11 +32,21 @@ struct BaseEnemy : Entity {
   void draw() { DrawRectangleRec(frame(), GREEN); }
 };
 
+struct BaseEnemy : Enemy {
+  BaseEnemy() : Enemy() {}
+  ~BaseEnemy() {}
+};
+
 struct EnemyManager {
-  vector<unique_ptr<Entity>> enemies{};
+  vector<unique_ptr<Enemy>> enemies{};
   Ticker ticker{};
 
   EnemyManager() {}
+
+  void reset() {
+    enemies.clear();
+    ticker.reset();
+  }
 
   void update() {
     if (ticker.ticker % 1000 == 0) {

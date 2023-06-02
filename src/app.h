@@ -19,8 +19,10 @@ struct App {
     InitWindow(config.win_w, config.win_h, "Fly & Pew");
     SetTargetFPS(config.fps);
 
-    player.reset();
+    reset();
   }
+
+  void reset() { player.reset(); }
 
   void run() {
     while (!WindowShouldClose()) {
@@ -43,6 +45,10 @@ struct App {
     enemy_manager.update();
 
     handle_enemy_player_collisions();
+
+    if (!player.active) {
+      reset();
+    }
   }
 
   void draw() {
@@ -61,6 +67,11 @@ struct App {
           enemy->deactivate();
           bullet->deactivate();
         }
+      }
+
+      if (enemy->collide(&player)) {
+        enemy->deactivate();
+        player.deactivate();
       }
     }
   }
