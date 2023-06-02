@@ -5,11 +5,16 @@
 
 #include "config.h"
 #include "entity.h"
+#include "fire.h"
 #include "util.h"
 
 using namespace std;
 
+#define ENEMY_DEFAULT_HEALTH 10
+
 struct Enemy : Entity {
+  int health{ENEMY_DEFAULT_HEALTH};
+
   Enemy()
       : Entity(Vector2{60.0, 40.0}, Vector2{GetScreenWidth() / 2.0f, 0.0},
                Vector2{0.0, 2.0}) {}
@@ -30,10 +35,17 @@ struct Enemy : Entity {
   }
 
   void draw() { DrawRectangleRec(frame(), GREEN); }
+
+  void hit(Fire* fire) {
+    health -= fire->power;
+    if (health <= 0) {
+      deactivate();
+    }
+  }
 };
 
 struct BaseEnemy : Enemy {
-  BaseEnemy() : Enemy() {}
+  BaseEnemy() : Enemy() { health = ENEMY_DEFAULT_HEALTH; }
   ~BaseEnemy() {}
 };
 

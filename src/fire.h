@@ -8,13 +8,14 @@
  * All fire POS is bottom-center.
  */
 
-#define FIRE_SMALL_LASER_FIRE_SPEED -10.0
+#define FIRE_DEFAULT_SPEED -10.0
+#define FIRE_DEFAULT_POWER 10
+struct Fire : Entity {
+  int power{FIRE_DEFAULT_POWER};
 
-struct SmallLaserFire : Entity {
-  SmallLaserFire(Vector2 pos)
-      : Entity({4.0, 12.0}, pos, {0.0, FIRE_SMALL_LASER_FIRE_SPEED}) {}
+  Fire(Vector2 pos) : Entity({4.0, 12.0}, pos, {0.0, FIRE_DEFAULT_SPEED}) {}
 
-  ~SmallLaserFire() {}
+  ~Fire() {}
 
   Rectangle frame() const {
     return Rectangle{pos.x - (dim.x / 2), pos.y, dim.x, dim.y};
@@ -30,4 +31,9 @@ struct SmallLaserFire : Entity {
   }
 
   void draw() { DrawRectangleRec(frame(), BLUE); }
+};
+
+struct SmallLaserFire : Fire {
+  SmallLaserFire(Vector2 pos) : Fire(pos) {}
+  ~SmallLaserFire() {}
 };

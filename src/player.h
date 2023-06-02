@@ -17,7 +17,7 @@ using namespace std;
 
 struct Player : Entity {
   Input input{};
-  vector<unique_ptr<Entity>> bullets{};
+  vector<unique_ptr<Fire>> bullets{};
 
   Player() : Entity(Vector2{60.0, 60.0}) { reset(); }
 

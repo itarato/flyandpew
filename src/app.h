@@ -64,7 +64,7 @@ struct App {
 
       for (auto& bullet : player.bullets) {
         if (enemy->collide(bullet.get())) {
-          enemy->deactivate();
+          enemy->hit(bullet.get());
           bullet->deactivate();
         }
       }
