@@ -1,6 +1,7 @@
 #pragma once
 
 #include <algorithm>
+#include <cstdlib>
 #include <memory>
 #include <vector>
 
@@ -29,3 +30,10 @@ struct Ticker {
   void tick() { ticker++; }
   void reset() { ticker = 0; }
 };
+
+// [min, max]
+int randi(int min, int max) { return (rand() % (max - min + 1)) + min; }
+// [0.0, 1.0]
+float randf() { return (float)(rand() & 0xFFFF) / 0xFFFF; }
+// [min, max]
+float randf(float min, float max) { return randf() * (max - min) + min; }

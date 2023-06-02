@@ -11,9 +11,9 @@
 
 using namespace std;
 
-#define PLAYER_VELOCITY 10.0
-#define PLAYER_MAX_V 10.0
-#define PLAYER_SPACE_FRIC 0.9
+#define PLAYER_VELOCITY 5.0
+#define PLAYER_MAX_V 20.0
+#define PLAYER_SPACE_FRIC 0.8
 
 struct Player : Entity {
   Input input{};

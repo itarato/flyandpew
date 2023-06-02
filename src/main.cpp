@@ -1,4 +1,6 @@
 #include <cstdio>
+#include <cstdlib>
+#include <ctime>
 #include <iostream>
 
 #include "app.h"
@@ -7,6 +9,8 @@
 using namespace std;
 
 int main() {
+  srand(time(nullptr));
+
   config.win_w = 1280;
   config.win_h = 1280;
   config.fps = 120;

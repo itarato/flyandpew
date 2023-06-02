@@ -15,9 +15,7 @@ using namespace std;
 struct Enemy : Entity {
   int health{ENEMY_DEFAULT_HEALTH};
 
-  Enemy()
-      : Entity(Vector2{60.0, 40.0}, Vector2{GetScreenWidth() / 2.0f, 0.0},
-               Vector2{0.0, 2.0}) {}
+  Enemy(Vector2 pos) : Entity(Vector2{60.0, 40.0}, pos, Vector2{0.0, 2.0}) {}
 
   ~Enemy() {}
 
@@ -45,7 +43,7 @@ struct Enemy : Entity {
 };
 
 struct BaseEnemy : Enemy {
-  BaseEnemy() : Enemy() { health = ENEMY_DEFAULT_HEALTH; }
+  BaseEnemy(Vector2 pos) : Enemy(pos) { health = ENEMY_DEFAULT_HEALTH; }
   ~BaseEnemy() {}
 };
 
@@ -61,8 +59,9 @@ struct EnemyManager {
   }
 
   void update() {
-    if (ticker.ticker % 1000 == 0) {
-      enemies.emplace_back(make_unique<BaseEnemy>());
+    if (ticker.ticker % 256 == 0) {
+      enemies.emplace_back(
+          make_unique<BaseEnemy>(Vector2{randf(0, GetScreenWidth()), 0.0}));
     }
 
     for (auto& enemy : enemies) {
