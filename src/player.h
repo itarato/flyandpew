@@ -16,16 +16,19 @@ using namespace std;
 #define PLAYER_SPACE_FRIC 0.9
 
 struct Player : Entity {
-  const int width{60};
-  const int height{60};
   Input input{};
-  vector<unique_ptr<UIElement>> bullets{};
+  vector<unique_ptr<Entity>> bullets{};
 
-  Player() : Entity() { reset(); }
+  Player() : Entity(Vector2{60.0, 60.0}) { reset(); }
 
   void reset() {
     pos.x = GetScreenWidth() >> 1;
     pos.y = GetScreenHeight() >> 1;
+  }
+
+  Rectangle frame() const {
+    return Rectangle{pos.x - (dim.x / 2.0f), pos.y - (dim.y / 2.0f), dim.x,
+                     dim.y};
   }
 
   void update() {
@@ -66,8 +69,7 @@ struct Player : Entity {
   }
 
   void draw() {
-    DrawRectangle(pos.x - (width >> 1), pos.y - (height >> 1), width, height,
-                  RED);
+    DrawRectangleRec(frame(), RED);
 
     for (auto &fire : bullets) {
       fire.get()->draw();

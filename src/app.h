@@ -41,6 +41,8 @@ struct App {
   void handle_state() {
     player.update();
     enemy_manager.update();
+
+    handle_enemy_player_collisions();
   }
 
   void draw() {
@@ -48,5 +50,18 @@ struct App {
     enemy_manager.draw();
 
     DrawFPS(4, 4);
+  }
+
+  void handle_enemy_player_collisions() {
+    for (auto& p_enemy : enemy_manager.enemies) {
+      auto enemy = p_enemy.get();
+
+      for (auto& bullet : player.bullets) {
+        if (enemy->collide(bullet.get())) {
+          enemy->deactivate();
+          bullet->deactivate();
+        }
+      }
+    }
   }
 };

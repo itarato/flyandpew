@@ -16,6 +16,10 @@ struct SmallLaserFire : Entity {
 
   ~SmallLaserFire() {}
 
+  Rectangle frame() const {
+    return Rectangle{pos.x - (dim.x / 2), pos.y, dim.x, dim.y};
+  }
+
   void update() {
     pos.x += v.x;
     pos.y += v.y;
@@ -25,5 +29,5 @@ struct SmallLaserFire : Entity {
     }
   }
 
-  void draw() { DrawRectangle(pos.x - (dim.x / 2), pos.y, dim.x, dim.y, BLUE); }
+  void draw() { DrawRectangleRec(frame(), BLUE); }
 };

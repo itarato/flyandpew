@@ -6,18 +6,6 @@
 
 using namespace std;
 
-struct UIElement {
-  bool active{true};
-
-  UIElement() {}
-  virtual ~UIElement() {}
-
-  virtual void draw() = 0;
-  virtual void update() = 0;
-
-  void deactivate() { active = false; }
-};
-
 inline void bound(float* what, float min, float max) {
   if (*what < min) {
     *what = min;
