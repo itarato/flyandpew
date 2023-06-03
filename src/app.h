@@ -22,7 +22,10 @@ struct App {
     reset();
   }
 
-  void reset() { player.reset(); }
+  void reset() {
+    player.reset();
+    enemy_manager.reset();
+  }
 
   void run() {
     while (!WindowShouldClose()) {

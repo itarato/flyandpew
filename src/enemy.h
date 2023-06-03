@@ -18,7 +18,7 @@ struct Enemy : Entity {
   unique_ptr<Mover> mover{nullptr};
 
   Enemy(Vector2 pos, unique_ptr<Mover> _mover)
-      : Entity(Vector2{60.0, 40.0}, pos, Vector2{0.0, 2.0}) {
+      : Entity(Vector2{60.0, 40.0}, pos, Vector2{0.0, 1.0}) {
     mover.swap(_mover);
   }
 
@@ -70,9 +70,8 @@ struct EnemyManager {
   }
 
   void update() {
-    if (ticker.ticker % 256 == 0) {
-      enemies.emplace_back(
-          make_unique<BaseEnemy>(Vector2{randf(0, GetScreenWidth()), 0.0}));
+    if (enemies.empty()) {
+      makeZigZagGrid(6, 4);
     }
 
     for (auto& enemy : enemies) {
@@ -80,13 +79,21 @@ struct EnemyManager {
     }
 
     remove_inactive(enemies);
-
-    ticker.tick();
   }
 
   void draw() {
     for (auto& enemy : enemies) {
       enemy.get()->draw();
+    }
+  }
+
+  void makeZigZagGrid(int x, int y) {
+    int spacing = GetScreenWidth() / (x + 1);
+    for (int j = 0; j < y; j++) {
+      for (int i = 0; i < x; i++) {
+        enemies.emplace_back(make_unique<BaseEnemy>(Vector2{
+            (float)((i + 1) * spacing), (float)((j - y + 1) * spacing)}));
+      }
     }
   }
 };

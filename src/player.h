@@ -12,7 +12,7 @@
 using namespace std;
 
 #define PLAYER_VELOCITY 5.0
-#define PLAYER_MAX_V 20.0
+#define PLAYER_MAX_V 12.0
 #define PLAYER_SPACE_FRIC 0.8
 
 struct Player : Entity {
@@ -41,14 +41,14 @@ struct Player : Entity {
       if (ix != 0.0) {
         v.x += ix * PLAYER_VELOCITY * config.v();
       } else {
-        v.x *= PLAYER_SPACE_FRIC;
+        v.x = 0;
       }
 
       const float iy = input.y();
       if (iy != 0.0) {
         v.y += iy * PLAYER_VELOCITY * config.v();
       } else {
-        v.y *= PLAYER_SPACE_FRIC;
+        v.y = 0;
       }
       bound(&v.x, -PLAYER_MAX_V * config.v(), PLAYER_MAX_V * config.v());
       bound(&v.y, -PLAYER_MAX_V * config.v(), PLAYER_MAX_V * config.v());
