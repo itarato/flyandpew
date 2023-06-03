@@ -7,6 +7,14 @@
 
 using namespace std;
 
+struct Circle {
+  Vector2 center;
+  int rad;
+
+  Circle(Vector2 center, int rad) : center(center), rad(rad) {}
+  Circle(float x, float y, int rad) : center(Vector2(x, y)), rad(rad) {}
+};
+
 inline void bound(float* what, float min, float max) {
   if (*what < min) {
     *what = min;

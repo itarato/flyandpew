@@ -62,6 +62,8 @@ struct App {
   }
 
   void handle_enemy_player_collisions() {
+    vector<Fire*> exploding_bullets{};
+
     for (auto& p_enemy : enemy_manager.enemies) {
       auto enemy = p_enemy.get();
 
@@ -69,12 +71,32 @@ struct App {
         if (enemy->collide(bullet.get())) {
           enemy->hit(bullet.get());
           bullet->deactivate();
+
+          exploding_bullets.push_back(bullet.get());
         }
       }
 
       if (enemy->collide(&player)) {
         enemy->deactivate();
         player.deactivate();
+      }
+    }
+
+    for (auto bullet : exploding_bullets) {
+      optional<Circle> blast = bullet->explosionFrame();
+      if (!blast.has_value()) {
+        continue;
+      }
+
+      for (auto& enemy : enemy_manager.enemies) {
+        if (!enemy->active) {
+          continue;
+        }
+
+        if (CheckCollisionCircleRec(blast.value().center, blast.value().rad,
+                                    enemy->frame())) {
+          enemy->deactivate();
+        }
       }
     }
   }

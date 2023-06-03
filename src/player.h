@@ -61,7 +61,7 @@ struct Player : Entity {
 
     {  // Fire.
       if (input.fire()) {
-        bullets.emplace_back(make_unique<SmallLaserFire>(pos));
+        bullets.emplace_back(make_unique<Rocket>(pos));
       }
 
       for (auto &fire : bullets) {
