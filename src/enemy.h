@@ -6,6 +6,7 @@
 #include "config.h"
 #include "entity.h"
 #include "fire.h"
+#include "move.h"
 #include "util.h"
 
 using namespace std;
@@ -14,8 +15,12 @@ using namespace std;
 
 struct Enemy : Entity {
   int health{ENEMY_DEFAULT_HEALTH};
+  unique_ptr<Mover> mover{nullptr};
 
-  Enemy(Vector2 pos) : Entity(Vector2{60.0, 40.0}, pos, Vector2{0.0, 2.0}) {}
+  Enemy(Vector2 pos, unique_ptr<Mover> _mover)
+      : Entity(Vector2{60.0, 40.0}, pos, Vector2{0.0, 2.0}) {
+    mover.swap(_mover);
+  }
 
   ~Enemy() {}
 
@@ -24,6 +29,10 @@ struct Enemy : Entity {
   }
 
   void update() {
+    if (mover) {
+      mover.get()->visit(this);
+    }
+
     pos.x += v.x * config.v();
     pos.y += v.y * config.v();
 
@@ -43,7 +52,9 @@ struct Enemy : Entity {
 };
 
 struct BaseEnemy : Enemy {
-  BaseEnemy(Vector2 pos) : Enemy(pos) { health = ENEMY_DEFAULT_HEALTH; }
+  BaseEnemy(Vector2 pos) : Enemy(pos, make_unique<SinMove>()) {
+    health = ENEMY_DEFAULT_HEALTH;
+  }
   ~BaseEnemy() {}
 };
 

@@ -27,8 +27,24 @@ struct Ticker {
 
   Ticker() {}
 
-  void tick() { ticker++; }
+  int tick() { return ticker++; }
   void reset() { ticker = 0; }
+};
+
+struct ModTicker : Ticker {
+  int mod;
+
+  ModTicker(int mod) : Ticker(), mod(mod) {}
+
+  bool tick_and_test() {
+    tick();
+    if (ticker == (uint64_t)mod) {
+      reset();
+      return true;
+    } else {
+      return false;
+    }
+  }
 };
 
 // [min, max]
