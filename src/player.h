@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cinttypes>
 #include <memory>
 #include <vector>
 
@@ -15,9 +16,14 @@ using namespace std;
 #define PLAYER_MAX_V 12.0
 #define PLAYER_SPACE_FRIC 0.8
 
+#define FIRE_BASIC 0
+#define FIRE_ROCKET 1
+#define FIRE_SELECTION_SIZE 2
+
 struct Player : Entity {
   Input input{};
   vector<unique_ptr<Fire>> bullets{};
+  uint8_t fire_type{FIRE_BASIC};
 
   Player() : Entity(Vector2{60.0, 60.0}) { reset(); }
 
@@ -59,9 +65,15 @@ struct Player : Entity {
       bound(&pos.y, 0.0, GetScreenHeight());
     }
 
+    {  // Fire selection.
+      if (input.dpad_left()) fire_type--;
+      if (input.dpad_right()) fire_type++;
+      fire_type = fire_type % FIRE_SELECTION_SIZE;
+    }
+
     {  // Fire.
       if (input.fire()) {
-        bullets.emplace_back(make_unique<Rocket>(pos));
+        bullets.emplace_back(fire_factory());
       }
 
       for (auto &fire : bullets) {
@@ -77,6 +89,18 @@ struct Player : Entity {
 
     for (auto &fire : bullets) {
       fire.get()->draw();
+    }
+  }
+
+  unique_ptr<Fire> fire_factory() {
+    switch (fire_type) {
+      case FIRE_BASIC:
+        return make_unique<SmallLaserFire>(pos);
+      case FIRE_ROCKET:
+        return make_unique<Rocket>(pos);
+      default:
+        TraceLog(LOG_ERROR, "Invalid fire type");
+        exit(EXIT_FAILURE);
     }
   }
 };

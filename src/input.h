@@ -5,9 +5,11 @@
 struct Input {
   Input() {}
 
-  const float x() {
-    if (IsGamepadAvailable(0)) {
-      return GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_X);
+  inline int gamepad_id() const { return 0; }
+
+  float x() const {
+    if (IsGamepadAvailable(gamepad_id())) {
+      return GetGamepadAxisMovement(gamepad_id(), GAMEPAD_AXIS_LEFT_X);
     } else {
       if (IsKeyDown(KEY_LEFT)) {
         return -1.0;
@@ -19,9 +21,9 @@ struct Input {
     return 0.0;
   }
 
-  const float y() {
-    if (IsGamepadAvailable(0)) {
-      return GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_Y);
+  float y() const {
+    if (IsGamepadAvailable(gamepad_id())) {
+      return GetGamepadAxisMovement(gamepad_id(), GAMEPAD_AXIS_LEFT_Y);
     } else {
       if (IsKeyDown(KEY_UP)) {
         return -1.0;
@@ -33,12 +35,41 @@ struct Input {
     return 0.0;
   }
 
-  const bool fire() {
+  bool fire() const {
     if (IsKeyPressed(KEY_SPACE)) {
       return true;
     }
-    if (IsGamepadButtonPressed(0, GAMEPAD_BUTTON_RIGHT_FACE_DOWN)) {
+    if (IsGamepadButtonPressed(gamepad_id(), GAMEPAD_BUTTON_RIGHT_FACE_DOWN)) {
       return true;
+    }
+
+    return false;
+  }
+
+  bool dpad_left() const {
+    if (IsGamepadAvailable(gamepad_id())) {
+      if (IsGamepadButtonPressed(gamepad_id(), GAMEPAD_BUTTON_LEFT_FACE_LEFT)) {
+        return true;
+      }
+    } else {
+      if (IsKeyPressed(KEY_A)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  bool dpad_right() const {
+    if (IsGamepadAvailable(gamepad_id())) {
+      if (IsGamepadButtonPressed(gamepad_id(),
+                                 GAMEPAD_BUTTON_LEFT_FACE_RIGHT)) {
+        return true;
+      }
+    } else {
+      if (IsKeyPressed(KEY_D)) {
+        return true;
+      }
     }
 
     return false;
