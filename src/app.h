@@ -2,13 +2,19 @@
 
 #include <raylib.h>
 
+#include <vector>
+
 #include "config.h"
 #include "enemy.h"
+#include "particles.h"
 #include "player.h"
+
+using namespace std;
 
 struct App {
   Player player{};
   EnemyManager enemy_manager{};
+  vector<unique_ptr<UIElement>> ui_elements{};
 
   App() {}
 
@@ -49,14 +55,19 @@ struct App {
 
     handle_enemy_player_collisions();
 
-    if (!player.active) {
-      reset();
-    }
+    if (!player.active) reset();
+
+    for (auto& ui_element : ui_elements) ui_element->update();
+
+    remove_inactive(ui_elements);
   }
 
   void draw() {
     player.draw();
+
     enemy_manager.draw();
+
+    for (auto& ui_element : ui_elements) ui_element->draw();
 
     DrawFPS(4, 4);
   }
@@ -73,6 +84,8 @@ struct App {
           bullet->deactivate();
 
           exploding_bullets.push_back(bullet.get());
+
+          ui_elements.emplace_back(make_unique<Firework>(enemy->pos));
         }
       }
 

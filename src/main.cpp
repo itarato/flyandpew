@@ -1,7 +1,6 @@
 #include <cstdio>
 #include <cstdlib>
 #include <ctime>
-#include <iostream>
 
 #include "app.h"
 #include "config.h"

@@ -35,7 +35,7 @@ struct Ticker {
 
   Ticker() {}
 
-  int tick() { return ticker++; }
+  uint64_t tick() { return ticker++; }
   void reset() { ticker = 0; }
 };
 
@@ -45,13 +45,27 @@ struct ModTicker : Ticker {
   ModTicker(int mod) : Ticker(), mod(mod) {}
 
   bool tick_and_test() {
-    tick();
-    if (ticker == (uint64_t)mod) {
+    if (tick() == (uint64_t)mod) {
       reset();
       return true;
     } else {
       return false;
     }
+  }
+};
+
+struct Countdown {
+  int count;
+
+  Countdown(int count) : count(count) {}
+
+  bool tick() {
+    if (count == 0) {
+      return true;
+    }
+
+    count--;
+    return false;
   }
 };
 

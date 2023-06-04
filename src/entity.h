@@ -2,25 +2,38 @@
 
 #include <raylib.h>
 
-struct Entity {
+struct UIElement {
+  bool active{true};
+
+  UIElement(){};
+  ~UIElement(){};
+
+  virtual void draw() = 0;
+  virtual void update() = 0;
+
+  void deactivate() { active = false; }
+};
+
+struct Entity : UIElement {
   Vector2 dim{0.0, 0.0};
   Vector2 pos{0.0, 0.0};
   Vector2 v{0.0, 0.0};
-  bool active{true};
 
   Entity() {}
   Entity(Vector2 dim) : dim(dim) {}
   Entity(Vector2 dim, Vector2 pos, Vector2 v) : dim(dim), pos(pos), v(v) {}
 
-  virtual ~Entity() {}
+  ~Entity() {}
 
-  virtual void draw() = 0;
-  virtual void update() = 0;
-  virtual Rectangle frame() const = 0;
-
-  void deactivate() { active = false; }
+  virtual Rectangle frame() const {
+    return Rectangle{pos.x - (dim.x / 2.0f), pos.y - (dim.y / 2.0f), dim.x,
+                     dim.y};
+  };
 
   bool collide(Entity* other) const {
     return CheckCollisionRecs(frame(), other->frame());
   }
+
+  virtual void draw(){};
+  virtual void update(){};
 };
