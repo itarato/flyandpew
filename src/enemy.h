@@ -16,6 +16,7 @@ using namespace std;
 struct Enemy : Entity {
   int health{ENEMY_DEFAULT_HEALTH};
   unique_ptr<Mover> mover{nullptr};
+  float fire_chance{0.001};
 
   Enemy(Vector2 pos, unique_ptr<Mover> _mover)
       : Entity(Vector2{60.0, 40.0}, pos, Vector2{0.0, 1.0}) {
@@ -28,7 +29,9 @@ struct Enemy : Entity {
     return Rectangle{pos.x - (dim.x / 2), pos.y - (dim.y / 2), dim.x, dim.y};
   }
 
-  void update() {
+  void update() {}
+
+  void update(vector<unique_ptr<Fire>>* bullet_collector) {
     if (mover) {
       mover.get()->visit(this);
     }
@@ -38,6 +41,12 @@ struct Enemy : Entity {
 
     if (pos.x < 0 || pos.x > GetScreenWidth() || pos.y > GetScreenHeight()) {
       deactivate();
+    }
+
+    if (randf() < fire_chance) {
+      // TODO: Add fire (to app).
+      bullet_collector->emplace_back(
+          make_unique<SmallLaserFire>(pos, Vector2(0.0, FIRE_DEFAULT_SPEED)));
     }
   }
 
@@ -61,12 +70,14 @@ struct BaseEnemy : Enemy {
 struct EnemyManager {
   vector<unique_ptr<Enemy>> enemies{};
   Ticker ticker{};
+  vector<unique_ptr<Fire>> bullets{};
 
   EnemyManager() {}
 
   void reset() {
     enemies.clear();
     ticker.reset();
+    bullets.clear();
   }
 
   void update() {
@@ -75,15 +86,24 @@ struct EnemyManager {
     }
 
     for (auto& enemy : enemies) {
-      enemy.get()->update();
+      enemy.get()->update(&bullets);
+    }
+
+    for (auto& bullet : bullets) {
+      bullet->update();
     }
 
     remove_inactive(enemies);
+    remove_inactive(bullets);
   }
 
   void draw() {
     for (auto& enemy : enemies) {
       enemy.get()->draw();
+    }
+
+    for (auto& bullet : bullets) {
+      bullet->draw();
     }
   }
 

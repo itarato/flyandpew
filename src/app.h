@@ -15,6 +15,7 @@ struct App {
   Player player{};
   EnemyManager enemy_manager{};
   vector<unique_ptr<UIElement>> ui_elements{};
+  int score{0};
 
   App() {}
 
@@ -31,6 +32,7 @@ struct App {
   void reset() {
     player.reset();
     enemy_manager.reset();
+    score = 0;
   }
 
   void run() {
@@ -41,7 +43,7 @@ struct App {
 
       BeginDrawing();
 
-      ClearBackground(RAYWHITE);
+      ClearBackground(BLACK);
 
       draw();
 
@@ -69,7 +71,11 @@ struct App {
 
     for (auto& ui_element : ui_elements) ui_element->draw();
 
-    DrawFPS(4, 4);
+    DrawFPS(GetScreenWidth() - 100, 4);
+
+    DrawText(TextFormat("Score: %d", score), 4, GetScreenHeight() - 24, 20,
+             GREEN);
+    DrawText(TextFormat("Life: %d", player.health), 4, 4, 20, GREEN);
   }
 
   void handle_enemy_player_collisions() {
@@ -91,7 +97,13 @@ struct App {
 
       if (enemy->collide(&player)) {
         enemy->deactivate();
-        player.deactivate();
+        player.hit();
+      }
+    }
+
+    for (auto& enemy_bullet : enemy_manager.bullets) {
+      if (enemy_bullet->collide(&player)) {
+        player.hit();
       }
     }
 

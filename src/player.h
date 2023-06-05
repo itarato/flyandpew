@@ -16,6 +16,8 @@ using namespace std;
 #define PLAYER_MAX_V 12.0
 #define PLAYER_SPACE_FRIC 0.8
 
+#define PLAYER_HEALTH 3
+
 #define FIRE_BASIC 0
 #define FIRE_ROCKET 1
 #define FIRE_SELECTION_SIZE 2
@@ -24,6 +26,7 @@ struct Player : Entity {
   Input input{};
   vector<unique_ptr<Fire>> bullets{};
   uint8_t fire_type{FIRE_BASIC};
+  int health{PLAYER_HEALTH};
 
   Player() : Entity(Vector2{60.0, 60.0}) { reset(); }
 
@@ -34,11 +37,19 @@ struct Player : Entity {
     v.y = 0.0;
     bullets.clear();
     active = true;
+    health = PLAYER_HEALTH;
   }
 
   Rectangle frame() const {
     return Rectangle{pos.x - (dim.x / 2.0f), pos.y - (dim.y / 2.0f), dim.x,
                      dim.y};
+  }
+
+  void hit() {
+    health--;
+    if (health <= 0) {
+      deactivate();
+    }
   }
 
   void update() {
@@ -85,7 +96,7 @@ struct Player : Entity {
   }
 
   void draw() {
-    DrawRectangleRec(frame(), RED);
+    DrawRectangleRec(frame(), ORANGE);
 
     for (auto &fire : bullets) {
       fire.get()->draw();
