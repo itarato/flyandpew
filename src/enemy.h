@@ -61,7 +61,7 @@ struct Enemy : Entity {
 };
 
 struct BaseEnemy : Enemy {
-  BaseEnemy(Vector2 pos) : Enemy(pos, make_unique<SinMove>()) {
+  BaseEnemy(Vector2 pos) : Enemy(pos, make_unique<WaveMove>()) {
     health = ENEMY_DEFAULT_HEALTH;
   }
   ~BaseEnemy() {}

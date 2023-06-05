@@ -34,22 +34,22 @@ struct ZigZagMove : Mover {
   }
 };
 
-struct SinMove : Mover {
+struct WaveMove : Mover {
   Ticker ticker{};
   int v{4};
   const int steps{255};
   bool init{false};
 
-  SinMove() {}
-  SinMove(int v) : v(v) {}
+  WaveMove() {}
+  WaveMove(int v) : v(v) {}
 
-  ~SinMove() {}
+  ~WaveMove() {}
 
   void visit(Entity* entity) {
     // 0..1
     float deg_v = (float)(ticker.tick() % (steps + 1)) / (float)steps;
     // 360
     float deg = deg_v * PI * 2.0;
-    entity->v.x = sinf(deg) * (float)v;
+    entity->v.x = cosf(deg) * (float)v;
   }
 };
