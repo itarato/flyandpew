@@ -34,6 +34,10 @@ struct Entity : UIElement {
     return CheckCollisionRecs(frame(), other->frame());
   }
 
-  virtual void draw(){};
-  virtual void update(){};
+  virtual void draw() { DrawRectangleRec(frame(), MAGENTA); };
+
+  virtual void update() {
+    pos.x += v.x;
+    pos.y += v.y;
+  };
 };

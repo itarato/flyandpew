@@ -8,6 +8,7 @@
 #include "enemy.h"
 #include "particles.h"
 #include "player.h"
+#include "upgrade.h"
 
 using namespace std;
 
@@ -16,6 +17,7 @@ struct App {
   EnemyManager enemy_manager{};
   vector<unique_ptr<UIElement>> ui_elements{};
   int score{0};
+  UpgradeManager upgrade_manager{};
 
   App() {}
 
@@ -32,12 +34,13 @@ struct App {
   void reset() {
     player.reset();
     enemy_manager.reset();
+    upgrade_manager.reset();
     score = 0;
   }
 
   void run() {
     while (!WindowShouldClose()) {
-      handle_state();
+      update();
 
       HideCursor();
 
@@ -51,11 +54,13 @@ struct App {
     }
   }
 
-  void handle_state() {
+  void update() {
     player.update();
     enemy_manager.update();
+    upgrade_manager.update();
 
     handle_enemy_player_collisions();
+    handle_upgrade_player_collision();
 
     if (!player.active) reset();
 
@@ -68,6 +73,8 @@ struct App {
     player.draw();
 
     enemy_manager.draw();
+
+    upgrade_manager.draw();
 
     for (auto& ui_element : ui_elements) ui_element->draw();
 
@@ -110,6 +117,7 @@ struct App {
     for (auto& enemy_bullet : enemy_manager.bullets) {
       if (enemy_bullet->collide(&player)) {
         player.hit();
+        enemy_bullet->deactivate();
       }
     }
 
@@ -128,6 +136,15 @@ struct App {
                                     enemy->frame())) {
           enemy->deactivate();
         }
+      }
+    }
+  }
+
+  void handle_upgrade_player_collision() {
+    for (auto& upgrade : upgrade_manager.upgrades) {
+      if (upgrade->collide(&player)) {
+        upgrade->apply(&player);
+        upgrade->deactivate();
       }
     }
   }
