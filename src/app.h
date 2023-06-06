@@ -73,9 +73,9 @@ struct App {
 
     DrawFPS(GetScreenWidth() - 100, 4);
 
-    DrawText(TextFormat("Score: %d", score), 4, GetScreenHeight() - 24, 20,
-             GREEN);
-    DrawText(TextFormat("Life: %d", player.health), 4, 4, 20, GREEN);
+    DrawText(TextFormat("Life: %d | Score: %d | Weapon: %s", player.health,
+                        score, fire_names[player.fire_type]),
+             4, GetScreenHeight() - 24, 20, GREEN);
   }
 
   void handle_enemy_player_collisions() {

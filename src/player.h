@@ -22,6 +22,11 @@ using namespace std;
 #define FIRE_ROCKET 1
 #define FIRE_SELECTION_SIZE 2
 
+const char *fire_names[] = {
+    "Mini pew",
+    "Bim bam pew",
+};
+
 struct Player : Entity {
   Input input{};
   vector<unique_ptr<Fire>> bullets{};
