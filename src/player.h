@@ -32,6 +32,7 @@ struct Player : Entity {
   vector<unique_ptr<Fire>> bullets{};
   uint8_t fire_type{FIRE_BASIC};
   int health{PLAYER_HEALTH};
+  BulletManager bullet_manager{};
 
   Player() : Entity(Vector2{60.0, 60.0}) { reset(); }
 
@@ -43,6 +44,7 @@ struct Player : Entity {
     bullets.clear();
     active = true;
     health = PLAYER_HEALTH;
+    bullet_manager.reset();
   }
 
   Rectangle frame() const {
@@ -88,8 +90,8 @@ struct Player : Entity {
     }
 
     {  // Fire.
-      if (input.fire()) {
-        bullets.emplace_back(fire_factory());
+      if (input.fire() && bullet_manager.has_capacity(fire_type)) {
+        bullets.emplace_back(bullet_manager.make_one(fire_type, pos));
       }
 
       for (auto &fire : bullets) {
@@ -105,18 +107,6 @@ struct Player : Entity {
 
     for (auto &fire : bullets) {
       fire.get()->draw();
-    }
-  }
-
-  unique_ptr<Fire> fire_factory() {
-    switch (fire_type) {
-      case FIRE_BASIC:
-        return make_unique<SmallLaserFire>(pos);
-      case FIRE_ROCKET:
-        return make_unique<Rocket>(pos);
-      default:
-        TraceLog(LOG_ERROR, "Invalid fire type");
-        exit(EXIT_FAILURE);
     }
   }
 };

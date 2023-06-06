@@ -73,8 +73,14 @@ struct App {
 
     DrawFPS(GetScreenWidth() - 100, 4);
 
-    DrawText(TextFormat("Life: %d | Score: %d | Weapon: %s", player.health,
-                        score, fire_names[player.fire_type]),
+    const char* bullet_count =
+        player.bullet_manager.capacity[player.fire_type] ==
+                FIRE_CAPACITY_UNLIMIED
+            ? "unlimited"
+            : TextFormat("%d",
+                         player.bullet_manager.capacity[player.fire_type]);
+    DrawText(TextFormat("Life: %d | Score: %d | Weapon: %s [%s]", player.health,
+                        score, fire_names[player.fire_type], bullet_count),
              4, GetScreenHeight() - 24, 20, GREEN);
   }
 

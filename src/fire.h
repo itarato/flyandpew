@@ -2,6 +2,7 @@
 
 #include <raylib.h>
 
+#include <map>
 #include <optional>
 
 #include "entity.h"
@@ -15,6 +16,13 @@ using namespace std;
 
 #define FIRE_DEFAULT_SPEED 10.0
 #define FIRE_DEFAULT_POWER 10
+#define FIRE_CAPACITY_UNLIMIED -1
+
+#define FIRE_BASIC 0
+#define FIRE_ROCKET 1
+
+#define FIRE_SELECTION_SIZE 2
+#define FIRE_ROCKET_DEFAULT_COUNT 3
 
 struct Fire : Entity {
   int power{FIRE_DEFAULT_POWER};
@@ -58,5 +66,42 @@ struct Rocket : Fire {
 
   optional<Circle> explosionFrame() const {
     return Circle(pos.x, pos.y + (dim.x / 2), hit_rad);
+  }
+};
+
+struct BulletManager {
+  int capacity[FIRE_SELECTION_SIZE] = {0};
+
+  BulletManager() { reset(); }
+
+  void reset() {
+    capacity[FIRE_BASIC] = FIRE_CAPACITY_UNLIMIED;
+    capacity[FIRE_ROCKET] = FIRE_ROCKET_DEFAULT_COUNT;
+  }
+
+  unique_ptr<Fire> make_one(int type, Vector2 pos) {
+    if (capacity[type] == FIRE_CAPACITY_UNLIMIED) {
+      // Do nothing, it's unlimited.
+    } else if (capacity[type] > 0) {
+      capacity[type]--;
+    } else {
+      TraceLog(LOG_ERROR,
+               "Cannot create bullet. Always check with `has_capacity`.");
+      exit(EXIT_FAILURE);
+    }
+
+    switch (type) {
+      case FIRE_BASIC:
+        return make_unique<SmallLaserFire>(pos);
+      case FIRE_ROCKET:
+        return make_unique<Rocket>(pos);
+      default:
+        TraceLog(LOG_ERROR, "Invalid fire type");
+        exit(EXIT_FAILURE);
+    }
+  }
+
+  bool has_capacity(int index) const {
+    return capacity[index] == FIRE_CAPACITY_UNLIMIED || capacity[index] > 0;
   }
 };

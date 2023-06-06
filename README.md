@@ -4,7 +4,7 @@ Space shooter.
 
 ## Feature need list:
 
-- weapon to have capacity
+<!-- - weapon to have capacity -->
 - weapon packs (fly in and catch)
 - player hurt animation (shake or something)
 - bosses
