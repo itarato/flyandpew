@@ -1,6 +1,7 @@
 #pragma once
 
 #include <raylib.h>
+#include <raymath.h>
 
 #include <map>
 #include <optional>
@@ -21,8 +22,9 @@ using namespace std;
 
 #define FIRE_BASIC 0
 #define FIRE_ROCKET 1
+#define FIRE_DOUBLE 2
 
-#define FIRE_SELECTION_SIZE 2
+#define FIRE_SELECTION_SIZE 3
 #define FIRE_ROCKET_DEFAULT_COUNT 3
 
 struct Fire : Entity {
@@ -77,9 +79,10 @@ struct BulletManager {
   void reset() {
     capacity[FIRE_BASIC] = FIRE_CAPACITY_UNLIMIED;
     capacity[FIRE_ROCKET] = FIRE_ROCKET_DEFAULT_COUNT;
+    capacity[FIRE_DOUBLE] = FIRE_CAPACITY_UNLIMIED;
   }
 
-  unique_ptr<Fire> make_one(int type, Vector2 pos) {
+  void make_one(vector<unique_ptr<Fire>>* container, int type, Vector2 pos) {
     if (capacity[type] == FIRE_CAPACITY_UNLIMIED) {
       // Do nothing, it's unlimited.
     } else if (capacity[type] > 0) {
@@ -92,9 +95,17 @@ struct BulletManager {
 
     switch (type) {
       case FIRE_BASIC:
-        return make_unique<SmallLaserFire>(pos);
+        container->emplace_back(make_unique<SmallLaserFire>(pos));
+        break;
       case FIRE_ROCKET:
-        return make_unique<Rocket>(pos);
+        container->emplace_back(make_unique<Rocket>(pos));
+        break;
+      case FIRE_DOUBLE:
+        container->emplace_back(
+            make_unique<SmallLaserFire>(Vector2Add(pos, Vector2(45.0, 0.0))));
+        container->emplace_back(
+            make_unique<SmallLaserFire>(Vector2Add(pos, Vector2(-45.0, 0.0))));
+        break;
       default:
         TraceLog(LOG_ERROR, "Invalid fire type");
         exit(EXIT_FAILURE);

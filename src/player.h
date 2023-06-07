@@ -19,14 +19,7 @@ using namespace std;
 
 #define PLAYER_HEALTH 3
 
-#define FIRE_BASIC 0
-#define FIRE_ROCKET 1
-#define FIRE_SELECTION_SIZE 2
-
-const char *fire_names[] = {
-    "Mini pew",
-    "Bim bam pew",
-};
+const char *fire_names[] = {"Mini pew", "Bim bam pew", "Double pew"};
 
 struct Player : Entity {
   Input input{};
@@ -88,7 +81,7 @@ struct Player : Entity {
 
     {  // Fire.
       if (input.fire() && bullet_manager.has_capacity(fire_type)) {
-        bullets.emplace_back(bullet_manager.make_one(fire_type, pos));
+        bullet_manager.make_one(&bullets, fire_type, pos);
       }
 
       for (auto &fire : bullets) {
