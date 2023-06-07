@@ -7,13 +7,16 @@
 
 using namespace std;
 
+#define PARTICLE_FIREWORK_SLOWDOWN 0.98
+
 struct Firework : UIElement {
   vector<Entity> particles{};
   Countdown countdown{60};
   const int count{16};
-  const float max_v{2.0};
+  const float max_v{3.0};
+  Color color;
 
-  Firework(Vector2 pos) {
+  Firework(Vector2 pos, Color color) : color(color) {
     for (int i = 0; i < count; i++) {
       particles.emplace_back(
           Vector2{4.0, 4.0}, pos,
@@ -26,6 +29,9 @@ struct Firework : UIElement {
     for (auto& particle : particles) {
       particle.pos.x += particle.v.x;
       particle.pos.y += particle.v.y;
+
+      particle.v.x *= PARTICLE_FIREWORK_SLOWDOWN;
+      particle.v.y *= PARTICLE_FIREWORK_SLOWDOWN;
     }
 
     if (countdown.tick()) {
@@ -35,7 +41,7 @@ struct Firework : UIElement {
 
   void draw() {
     for (auto& particle : particles) {
-      DrawRectangleV(particle.pos, particle.dim, WHITE);
+      DrawRectangleV(particle.pos, particle.dim, color);
     }
   }
 };
