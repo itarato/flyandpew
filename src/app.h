@@ -31,6 +31,9 @@ struct App {
 
     resource_manager.textures.insert(
         {RESRC_PLAYER, LoadTexture("./resource/image/player_0.png")});
+    resource_manager.textures.insert(
+        {RESRC_LASER_BLUE_SMALL,
+         LoadTexture("./resource/image/laser_blue_small.png")});
 
     reset();
   }

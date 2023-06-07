@@ -112,10 +112,10 @@ struct Player : Entity {
   }
 
   void draw() {
-    DrawTexture(*texture, pos.x - (dim.x / 2), pos.y, WHITE);
-
     for (auto &fire : bullets) {
       fire.get()->draw();
     }
+
+    DrawTexture(*texture, pos.x - (dim.x / 2), pos.y, WHITE);
   }
 };

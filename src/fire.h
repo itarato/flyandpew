@@ -6,6 +6,7 @@
 #include <optional>
 
 #include "entity.h"
+#include "resource.h"
 #include "util.h"
 
 using namespace std;
@@ -53,8 +54,19 @@ struct Fire : Entity {
 };
 
 struct SmallLaserFire : Fire {
-  SmallLaserFire(Vector2 pos) : Fire(pos) {}
-  SmallLaserFire(Vector2 pos, Vector2 v) : Fire(pos, v) {}
+  Texture2D *texture;
+
+  SmallLaserFire(Vector2 pos) : Fire(pos) { init(); }
+  SmallLaserFire(Vector2 pos, Vector2 v) : Fire(pos, v) { init(); }
+
+  void init() {
+    texture = &resource_manager.textures[RESRC_LASER_BLUE_SMALL];
+    dim.x = texture->width;
+    dim.y = texture->height;
+  }
+
+  void draw() { DrawTexture(*texture, pos.x - (dim.x / 2), pos.y, WHITE); }
+
   ~SmallLaserFire() {}
 };
 

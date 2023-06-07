@@ -8,6 +8,7 @@
 using namespace std;
 
 #define RESRC_PLAYER "player"
+#define RESRC_LASER_BLUE_SMALL "laser_blue_small"
 
 struct ResourceManager {
   map<string, Texture2D> textures{};
