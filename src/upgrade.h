@@ -26,13 +26,31 @@ struct Upgrade : Entity {
 
   Upgrade(int type, Vector2 pos)
       : Entity(Vector2(30.0, 30.0), pos, Vector2{0.0, UPGRADE_SPEED}),
-        type(type) {}
+        type(type) {
+    init();
+  }
 
   Upgrade(int type, Vector2 pos, int v1, int v2)
       : Entity(Vector2(30.0, 30.0), pos, Vector2{0.0, UPGRADE_SPEED}),
         type(type),
         v1(v1),
-        v2(v2) {}
+        v2(v2) {
+    init();
+  }
+
+  void init() {
+    switch (type) {
+      case UPGRADE_TYPE_BULLET:
+        setTexture(RESRC_UPGRADE_BULLET);
+        break;
+      case UPGRADE_TYPE_HEALTH:
+        setTexture(RESRC_UPGRADE_HEALTH);
+        break;
+      default:
+        TraceLog(LOG_ERROR, "Invalid type");
+        exit(EXIT_FAILURE);
+    }
+  }
 
   void update() {
     Entity::update();

@@ -7,13 +7,13 @@
 
 using namespace std;
 
-#define PARTICLE_FIREWORK_SLOWDOWN 0.98
+#define PARTICLE_FIREWORK_SLOWDOWN 0.96
 
 struct Firework : UIElement {
   vector<Entity> particles{};
-  Countdown countdown{60};
+  Countdown countdown{42};
   const int count{16};
-  const float max_v{3.0};
+  const float max_v{4.0};
   Color color;
 
   Firework(Vector2 pos, Color color) : color(color) {

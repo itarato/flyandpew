@@ -34,10 +34,6 @@ struct Fire : Entity {
 
   ~Fire() {}
 
-  Rectangle frame() const {
-    return Rectangle{pos.x - (dim.x / 2), pos.y, dim.x, dim.y};
-  }
-
   virtual optional<Circle> explosionFrame() const { return nullopt; }
 
   void update() {
@@ -49,31 +45,23 @@ struct Fire : Entity {
       deactivate();
     }
   }
-
-  void draw() { DrawRectangleRec(frame(), BLUE); }
 };
 
 struct SmallLaserFire : Fire {
-  Texture2D *texture;
-
   SmallLaserFire(Vector2 pos) : Fire(pos) { init(); }
   SmallLaserFire(Vector2 pos, Vector2 v) : Fire(pos, v) { init(); }
 
-  void init() {
-    texture = &resource_manager.textures[RESRC_LASER_BLUE_SMALL];
-    dim.x = texture->width;
-    dim.y = texture->height;
-  }
-
-  void draw() { DrawTexture(*texture, pos.x - (dim.x / 2), pos.y, WHITE); }
-
   ~SmallLaserFire() {}
+
+  void init() { setTexture(RESRC_LASER_BLUE_SMALL); }
 };
 
 struct Rocket : Fire {
   const int hit_rad{256};
 
-  Rocket(Vector2 pos) : Fire(Vector2(8, 16), pos, Vector2(0, -5)) {}
+  Rocket(Vector2 pos) : Fire(Vector2(8, 16), pos, Vector2(0, -5)) {
+    setTexture(RESRC_LASER_RED_BIG);
+  }
   ~Rocket() {}
 
   optional<Circle> explosionFrame() const {

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <raylib.h>
+
 #include <memory>
 #include <vector>
 
@@ -7,6 +9,7 @@
 #include "entity.h"
 #include "fire.h"
 #include "move.h"
+#include "resource.h"
 #include "util.h"
 
 using namespace std;
@@ -24,10 +27,6 @@ struct Enemy : Entity {
   }
 
   ~Enemy() {}
-
-  Rectangle frame() const {
-    return Rectangle{pos.x - (dim.x / 2), pos.y - (dim.y / 2), dim.x, dim.y};
-  }
 
   void update() {}
 
@@ -50,8 +49,6 @@ struct Enemy : Entity {
     }
   }
 
-  void draw() { DrawRectangleRec(frame(), GREEN); }
-
   void hit(Fire* fire) {
     health -= fire->power;
     if (health <= 0) {
@@ -63,7 +60,10 @@ struct Enemy : Entity {
 struct BaseEnemy : Enemy {
   BaseEnemy(Vector2 pos) : Enemy(pos, make_unique<WaveMove>()) {
     health = ENEMY_DEFAULT_HEALTH;
+
+    setTexture(RESRC_ENEMY);
   }
+
   ~BaseEnemy() {}
 };
 

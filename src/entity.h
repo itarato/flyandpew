@@ -2,6 +2,12 @@
 
 #include <raylib.h>
 
+#include <string>
+
+#include "resource.h"
+
+using namespace std;
+
 struct UIElement {
   bool active{true};
 
@@ -18,6 +24,7 @@ struct Entity : UIElement {
   Vector2 dim{0.0, 0.0};
   Vector2 pos{0.0, 0.0};
   Vector2 v{0.0, 0.0};
+  Texture2D* texture{nullptr};
 
   Entity() {}
   Entity(Vector2 dim) : dim(dim) {}
@@ -34,10 +41,22 @@ struct Entity : UIElement {
     return CheckCollisionRecs(frame(), other->frame());
   }
 
-  virtual void draw() { DrawRectangleRec(frame(), MAGENTA); };
+  virtual void draw() {
+    if (texture) {
+      DrawTexture(*texture, pos.x - (dim.x / 2), pos.y - (dim.y / 2), WHITE);
+    } else {
+      DrawRectangleRec(frame(), MAGENTA);
+    }
+  }
 
   virtual void update() {
     pos.x += v.x;
     pos.y += v.y;
   };
+
+  void setTexture(string texture_name) {
+    texture = &resource_manager.textures[texture_name];
+    dim.x = texture->width;
+    dim.y = texture->height;
+  }
 };

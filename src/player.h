@@ -34,12 +34,11 @@ struct Player : Entity {
   uint8_t fire_type{FIRE_BASIC};
   int health{PLAYER_HEALTH};
   BulletManager bullet_manager{};
-  Texture2D *texture;
 
   Player() : Entity() {}
 
   void reset() {
-    setTexture();
+    setTexture(RESRC_PLAYER);
     pos.x = GetScreenWidth() >> 1;
     pos.y = GetScreenHeight() >> 1;
     v.x = 0.0;
@@ -48,17 +47,6 @@ struct Player : Entity {
     active = true;
     health = PLAYER_HEALTH;
     bullet_manager.reset();
-  }
-
-  void setTexture() {
-    texture = &resource_manager.textures[RESRC_PLAYER];
-    dim.x = texture->width;
-    dim.y = texture->height;
-  }
-
-  Rectangle frame() const {
-    return Rectangle{pos.x - (dim.x / 2.0f), pos.y - (dim.y / 2.0f), dim.x,
-                     dim.y};
   }
 
   void hit() {
@@ -89,7 +77,7 @@ struct Player : Entity {
       pos.x += v.x;
       pos.y += v.y;
       bound(&pos.x, dim.x / 2, GetScreenWidth() - (dim.x / 2));
-      bound(&pos.y, 0.0, GetScreenHeight() - dim.y);
+      bound(&pos.y, dim.y / 2, GetScreenHeight() - (dim.y / 2));
     }
 
     {  // Fire selection.
@@ -116,6 +104,6 @@ struct Player : Entity {
       fire.get()->draw();
     }
 
-    DrawTexture(*texture, pos.x - (dim.x / 2), pos.y, WHITE);
+    Entity::draw();
   }
 };

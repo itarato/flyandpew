@@ -34,6 +34,17 @@ struct App {
     resource_manager.textures.insert(
         {RESRC_LASER_BLUE_SMALL,
          LoadTexture("./resource/image/laser_blue_small.png")});
+    resource_manager.textures.insert(
+        {RESRC_LASER_RED_BIG,
+         LoadTexture("./resource/image/laser_red_big.png")});
+    resource_manager.textures.insert(
+        {RESRC_ENEMY, LoadTexture("./resource/image/enemy_0.png")});
+    resource_manager.textures.insert(
+        {RESRC_UPGRADE_HEALTH,
+         LoadTexture("./resource/image/upgrade_health.png")});
+    resource_manager.textures.insert(
+        {RESRC_UPGRADE_BULLET,
+         LoadTexture("./resource/image/upgrade_bullet.png")});
 
     reset();
   }
@@ -106,6 +117,8 @@ struct App {
 
       for (auto& bullet : player.bullets) {
         if (enemy->collide(bullet.get())) {
+          score += enemy->health;
+
           enemy->hit(bullet.get());
           bullet->deactivate();
 
