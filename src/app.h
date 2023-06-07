@@ -8,6 +8,7 @@
 #include "enemy.h"
 #include "particles.h"
 #include "player.h"
+#include "resource.h"
 #include "upgrade.h"
 
 using namespace std;
@@ -27,6 +28,9 @@ struct App {
 
     InitWindow(config.win_w, config.win_h, "Fly & Pew");
     SetTargetFPS(config.fps);
+
+    resource_manager.textures.insert(
+        {RESRC_PLAYER, LoadTexture("./resource/image/player_0.png")});
 
     reset();
   }

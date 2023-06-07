@@ -4,6 +4,7 @@
 
 #include "app.h"
 #include "config.h"
+#include "resource.h"
 
 using namespace std;
 

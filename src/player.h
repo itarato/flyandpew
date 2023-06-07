@@ -8,6 +8,7 @@
 #include "entity.h"
 #include "fire.h"
 #include "input.h"
+#include "resource.h"
 #include "util.h"
 
 using namespace std;
@@ -33,10 +34,12 @@ struct Player : Entity {
   uint8_t fire_type{FIRE_BASIC};
   int health{PLAYER_HEALTH};
   BulletManager bullet_manager{};
+  Texture2D *texture;
 
-  Player() : Entity(Vector2{60.0, 60.0}) { reset(); }
+  Player() : Entity() {}
 
   void reset() {
+    setTexture();
     pos.x = GetScreenWidth() >> 1;
     pos.y = GetScreenHeight() >> 1;
     v.x = 0.0;
@@ -45,6 +48,12 @@ struct Player : Entity {
     active = true;
     health = PLAYER_HEALTH;
     bullet_manager.reset();
+  }
+
+  void setTexture() {
+    texture = &resource_manager.textures[RESRC_PLAYER];
+    dim.x = texture->width;
+    dim.y = texture->height;
   }
 
   Rectangle frame() const {
@@ -79,8 +88,8 @@ struct Player : Entity {
 
       pos.x += v.x;
       pos.y += v.y;
-      bound(&pos.x, 0.0, GetScreenWidth());
-      bound(&pos.y, 0.0, GetScreenHeight());
+      bound(&pos.x, dim.x / 2, GetScreenWidth() - (dim.x / 2));
+      bound(&pos.y, 0.0, GetScreenHeight() - dim.y);
     }
 
     {  // Fire selection.
@@ -103,7 +112,7 @@ struct Player : Entity {
   }
 
   void draw() {
-    DrawRectangleRec(frame(), ORANGE);
+    DrawTexture(*texture, pos.x - (dim.x / 2), pos.y, WHITE);
 
     for (auto &fire : bullets) {
       fire.get()->draw();
