@@ -27,6 +27,7 @@ struct Player : Entity {
   uint8_t fire_type{FIRE_BASIC};
   int health{PLAYER_HEALTH};
   BulletManager bullet_manager{};
+  PhaseTicker fire_phase_ticker{{4, 1}};
 
   Player() : Entity() {}
 
@@ -90,6 +91,8 @@ struct Player : Entity {
 
       remove_inactive(bullets);
     }
+
+    fire_phase_ticker.tick();
   }
 
   void draw() {
@@ -101,7 +104,10 @@ struct Player : Entity {
 
     const Texture2D *exhaust_texture =
         &resource_manager.textures[RESRC_EFFECT_EXHAUST];
-    DrawTexture(*exhaust_texture, pos.x - (exhaust_texture->width / 2),
-                pos.y + (dim.y / 2), WHITE);
+
+    if (fire_phase_ticker.phase == 0) {
+      DrawTexture(*exhaust_texture, pos.x - (exhaust_texture->width / 2),
+                  pos.y + (dim.y / 2), WHITE);
+    }
   }
 };

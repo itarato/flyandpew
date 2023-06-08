@@ -63,7 +63,7 @@ struct PhaseTicker : Ticker {
   uint64_t tick() {
     const int res = Ticker::tick();
 
-    if (ticker >= phases[phase]) {
+    if (ticker >= (uint64_t)phases[phase]) {
       phase = (phase + 1) % phases.size();
       reset();
     }
