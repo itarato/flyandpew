@@ -2,6 +2,7 @@
 
 #include <raylib.h>
 
+#include <algorithm>
 #include <memory>
 #include <vector>
 
@@ -19,7 +20,8 @@ using namespace std;
 struct Enemy : Entity {
   int health{ENEMY_DEFAULT_HEALTH};
   unique_ptr<Mover> mover{nullptr};
-  float fire_chance{0.001};
+  bool is_static{false};
+  float fire_chance{0.0};
 
   Enemy(Vector2 pos, unique_ptr<Mover> _mover)
       : Entity(Vector2{60.0, 40.0}, pos, Vector2{0.0, 1.0}) {
@@ -49,7 +51,7 @@ struct Enemy : Entity {
     }
   }
 
-  void hit(Fire* fire) {
+  virtual void hit(Fire* fire) {
     health -= fire->power;
     if (health <= 0) {
       deactivate();
@@ -57,9 +59,38 @@ struct Enemy : Entity {
   }
 };
 
+const char* meteor_file_names[] = {
+    "meteorBrown_big1.png",   "meteorBrown_big2.png",   "meteorBrown_big3.png",
+    "meteorBrown_big4.png",   "meteorBrown_med1.png",   "meteorBrown_med3.png",
+    "meteorBrown_small1.png", "meteorBrown_small2.png", "meteorBrown_tiny1.png",
+    "meteorBrown_tiny2.png",  "meteorGrey_big1.png",    "meteorGrey_big2.png",
+    "meteorGrey_big3.png",    "meteorGrey_big4.png",    "meteorGrey_med1.png",
+    "meteorGrey_med2.png",    "meteorGrey_small1.png",  "meteorGrey_small2.png",
+    "meteorGrey_tiny1.png",   "meteorGrey_tiny2.png",
+};
+
+const int meteor_sizes[] = {
+    4, 4, 4, 4, 3, 3, 2, 2, 1, 1, 4, 4, 4, 4, 3, 3, 2, 2, 1, 1,
+};
+
+struct Meteor : Enemy {
+  Meteor(Vector2 pos) : Enemy(pos, nullptr) {
+    is_static = true;
+
+    v.y = 3;
+
+    const int rnd = randi(0, (sizeof(meteor_file_names) / sizeof(char*)) - 1);
+    setTexture(meteor_file_names[rnd]);
+    health = meteor_sizes[rnd] * 5;
+  }
+
+  ~Meteor() {}
+};
+
 struct BaseEnemy : Enemy {
   BaseEnemy(Vector2 pos) : Enemy(pos, make_unique<WaveMove>()) {
     health = ENEMY_DEFAULT_HEALTH;
+    fire_chance = 0.001;
 
     setTexture(RESRC_ENEMY);
   }
@@ -81,8 +112,17 @@ struct EnemyManager {
   }
 
   void update() {
-    if (enemies.empty()) {
+    const int non_static_enemy_count =
+        count_if(enemies.begin(), enemies.end(),
+                 [](const auto& enemy) { return !enemy->is_static; });
+
+    if (non_static_enemy_count == 0) {
       makeZigZagGrid(6, 4);
+    }
+
+    if (randf() < 0.001) {
+      enemies.emplace_back(
+          make_unique<Meteor>(Vector2(randi(0, GetScreenWidth()), 0.0)));
     }
 
     for (auto& enemy : enemies) {
@@ -99,7 +139,10 @@ struct EnemyManager {
 
   void draw() {
     for (auto& enemy : enemies) {
-      enemy.get()->draw();
+      if (enemy->is_static) enemy.get()->draw();
+    }
+    for (auto& enemy : enemies) {
+      if (!enemy->is_static) enemy.get()->draw();
     }
 
     for (auto& bullet : bullets) {

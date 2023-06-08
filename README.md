@@ -6,6 +6,8 @@ Space shooter.
 
 <!-- - weapon to have capacity -->
 <!-- - weapon packs (fly in and catch) -->
+- meteors
+- multiple enemy
 - enemy life bars
 - player hurt animation (shake or something)
 - bosses
@@ -13,6 +15,7 @@ Space shooter.
 - background effect (moving stars, etc)
 - time slow down effect (to escape enemy bullets)
 - sound
+- meteor fragments on bullet hit
 - 
 
 ---
