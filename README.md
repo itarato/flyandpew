@@ -7,7 +7,7 @@ Space shooter.
 <!-- - weapon to have capacity -->
 <!-- - weapon packs (fly in and catch) -->
 <!-- - meteors -->
-- multiple enemy
+<!-- - multiple enemy -->
 - shield
 - arcade enemy movement (left down right down ...)
 - enemy life bars

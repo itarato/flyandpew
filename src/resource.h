@@ -10,9 +10,9 @@ using namespace std;
 #define RESRC_PLAYER "player_0.png"
 #define RESRC_LASER_BLUE_SMALL "laser_blue_small.png"
 #define RESRC_LASER_RED_BIG "laser_red_big.png"
-#define RESRC_ENEMY "enemy_0.png"
 #define RESRC_UPGRADE_HEALTH "upgrade_health.png"
 #define RESRC_UPGRADE_BULLET "upgrade_bullet.png"
+#define RESRC_EFFECT_EXHAUST "fire10.png"
 
 struct ResourceManager {
   map<string, Texture2D> textures{};

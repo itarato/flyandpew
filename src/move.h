@@ -53,3 +53,36 @@ struct WaveMove : Mover {
     entity->v.x = cosf(deg) * (float)v;
   }
 };
+
+struct ClassicArcadeMove : Mover {
+  PhaseTicker phase_ticker{{30, 120, 30, 120}};
+
+  ClassicArcadeMove() {}
+  ~ClassicArcadeMove() {}
+
+  void visit(Entity* entity) {
+    phase_ticker.tick();
+
+    switch (phase_ticker.phase) {
+      case 0:
+        entity->v.x = 0;
+        entity->v.y = 2;
+        break;
+      case 1:
+        entity->v.x = 1;
+        entity->v.y = 0;
+        break;
+      case 2:
+        entity->v.x = 0;
+        entity->v.y = 2;
+        break;
+      case 3:
+        entity->v.x = -1;
+        entity->v.y = 0;
+        break;
+      default:
+        TraceLog(LOG_ERROR, "Bad phase");
+        exit(EXIT_FAILURE);
+    }
+  }
+};

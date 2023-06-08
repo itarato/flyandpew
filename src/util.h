@@ -35,7 +35,7 @@ struct Ticker {
 
   Ticker() {}
 
-  uint64_t tick() { return ticker++; }
+  virtual uint64_t tick() { return ticker++; }
   void reset() { ticker = 0; }
 };
 
@@ -51,6 +51,24 @@ struct ModTicker : Ticker {
     } else {
       return false;
     }
+  }
+};
+
+struct PhaseTicker : Ticker {
+  const vector<int> phases;
+  int phase{0};
+
+  PhaseTicker(vector<int> phases) : Ticker(), phases(phases) {}
+
+  uint64_t tick() {
+    const int res = Ticker::tick();
+
+    if (ticker >= phases[phase]) {
+      phase = (phase + 1) % phases.size();
+      reset();
+    }
+
+    return res;
   }
 };
 

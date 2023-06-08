@@ -98,7 +98,7 @@ const char* enemy_file_names[] = {
 
 struct BaseEnemy : Enemy {
   BaseEnemy(Vector2 pos, int enemy_index)
-      : Enemy(pos, make_unique<WaveMove>()) {
+      : Enemy(pos, make_unique<ClassicArcadeMove>()) {
     health = ENEMY_DEFAULT_HEALTH;
     fire_chance = 0.001;
 

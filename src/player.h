@@ -98,5 +98,10 @@ struct Player : Entity {
     }
 
     Entity::draw();
+
+    const Texture2D *exhaust_texture =
+        &resource_manager.textures[RESRC_EFFECT_EXHAUST];
+    DrawTexture(*exhaust_texture, pos.x - (exhaust_texture->width / 2),
+                pos.y + (dim.y / 2), WHITE);
   }
 };
