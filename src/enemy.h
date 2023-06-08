@@ -87,12 +87,22 @@ struct Meteor : Enemy {
   ~Meteor() {}
 };
 
+// 5 pieces X 4 color.
+const char* enemy_file_names[] = {
+    "enemyBlack1.png", "enemyBlack2.png", "enemyBlack3.png", "enemyBlack4.png",
+    "enemyBlack5.png", "enemyBlue1.png",  "enemyBlue2.png",  "enemyBlue3.png",
+    "enemyBlue4.png",  "enemyBlue5.png",  "enemyGreen1.png", "enemyGreen2.png",
+    "enemyGreen3.png", "enemyGreen4.png", "enemyGreen5.png", "enemyRed1.png",
+    "enemyRed2.png",   "enemyRed3.png",   "enemyRed4.png",   "enemyRed5.png",
+};
+
 struct BaseEnemy : Enemy {
-  BaseEnemy(Vector2 pos) : Enemy(pos, make_unique<WaveMove>()) {
+  BaseEnemy(Vector2 pos, int enemy_index)
+      : Enemy(pos, make_unique<WaveMove>()) {
     health = ENEMY_DEFAULT_HEALTH;
     fire_chance = 0.001;
 
-    setTexture(RESRC_ENEMY);
+    setTexture(enemy_file_names[enemy_index]);
   }
 
   ~BaseEnemy() {}
@@ -151,11 +161,14 @@ struct EnemyManager {
   }
 
   void makeZigZagGrid(int x, int y) {
+    const int piece_idx = randi(0, 4);
+
     int spacing = GetScreenWidth() / (x + 1);
     for (int j = 0; j < y; j++) {
       for (int i = 0; i < x; i++) {
-        enemies.emplace_back(make_unique<BaseEnemy>(Vector2{
-            (float)((i + 1) * spacing), (float)((j - y + 1) * spacing)}));
+        enemies.emplace_back(make_unique<BaseEnemy>(
+            Vector2{(float)((i + 1) * spacing), (float)((j - y + 1) * spacing)},
+            (j % 4) * 5 + piece_idx));
       }
     }
   }

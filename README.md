@@ -6,8 +6,10 @@ Space shooter.
 
 <!-- - weapon to have capacity -->
 <!-- - weapon packs (fly in and catch) -->
-- meteors
+<!-- - meteors -->
 - multiple enemy
+- shield
+- arcade enemy movement (left down right down ...)
 - enemy life bars
 - player hurt animation (shake or something)
 - bosses
