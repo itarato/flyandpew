@@ -14,9 +14,16 @@ using namespace std;
 
 #define UPGRADE_TYPE_BULLET 0
 #define UPGRADE_TYPE_HEALTH 1
-#define UPGRADE_TYPE_COUNT 2
+#define UPGRADE_TYPE_SHIELD 2
+#define UPGRADE_TYPE_COUNT 3
 
 #define UPGRADE_SPEED 2
+
+const char* upgrade_file_names[] = {
+    RESRC_UPGRADE_BULLET,
+    RESRC_UPGRADE_HEALTH,
+    RESRC_UPGRADE_SHIELD,
+};
 
 struct Upgrade : Entity {
   int type;
@@ -38,19 +45,7 @@ struct Upgrade : Entity {
     init();
   }
 
-  void init() {
-    switch (type) {
-      case UPGRADE_TYPE_BULLET:
-        setTexture(RESRC_UPGRADE_BULLET);
-        break;
-      case UPGRADE_TYPE_HEALTH:
-        setTexture(RESRC_UPGRADE_HEALTH);
-        break;
-      default:
-        TraceLog(LOG_ERROR, "Invalid type");
-        exit(EXIT_FAILURE);
-    }
-  }
+  void init() { setTexture(upgrade_file_names[type]); }
 
   void update() {
     Entity::update();
@@ -66,6 +61,9 @@ struct Upgrade : Entity {
       case UPGRADE_TYPE_HEALTH:
         player->health++;
         break;
+      case UPGRADE_TYPE_SHIELD:
+        player->shield_up();
+        break;
       default:
         TraceLog(LOG_ERROR, "Invalid upgrade type on apply");
         exit(EXIT_FAILURE);
@@ -75,9 +73,10 @@ struct Upgrade : Entity {
 
 struct UpgradeManager : UIElement {
   vector<unique_ptr<Upgrade>> upgrades{};
-  const float upgrade_chances[2] = {
+  const float upgrade_chances[3] = {
       0.002,  // Bullet.
       0.001,  // Life.
+      0.001   // Shield.
   };
 
   void reset() { upgrades.clear(); }
@@ -99,6 +98,10 @@ struct UpgradeManager : UIElement {
             upgrades.emplace_back(make_unique<Upgrade>(
                 UPGRADE_TYPE_HEALTH, Vector2(randi(0, GetScreenWidth()), 0.0),
                 1, 0));
+            break;
+          case UPGRADE_TYPE_SHIELD:
+            upgrades.emplace_back(make_unique<Upgrade>(
+                UPGRADE_TYPE_SHIELD, Vector2(randi(0, GetScreenWidth()), 0.0)));
             break;
           default:
             TraceLog(LOG_ERROR, "Invalid upgrade type");

@@ -115,17 +115,23 @@ struct App {
 
       if (enemy->collide(&player)) {
         enemy->deactivate();
-        player.hit();
+
+        if (!player.shield) {
+          player.hit();
+          ui_elements.emplace_back(make_unique<Firework>(player.pos, RED));
+        }
 
         ui_elements.emplace_back(make_unique<Firework>(enemy->pos, RED));
-        ui_elements.emplace_back(make_unique<Firework>(player.pos, RED));
       }
     }
 
     for (auto& enemy_bullet : enemy_manager.bullets) {
       if (enemy_bullet->collide(&player)) {
-        player.hit();
-        ui_elements.emplace_back(make_unique<Firework>(enemy_bullet->pos, RED));
+        if (!player.shield) {
+          player.hit();
+          ui_elements.emplace_back(
+              make_unique<Firework>(enemy_bullet->pos, RED));
+        }
         enemy_bullet->deactivate();
       }
     }

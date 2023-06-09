@@ -73,18 +73,21 @@ struct PhaseTicker : Ticker {
 };
 
 struct Countdown {
-  int count;
+  int counter;
+  const int count;
 
-  Countdown(int count) : count(count) {}
+  Countdown(int count) : count(count) { reset(); }
 
   bool tick() {
-    if (count == 0) {
+    if (counter == 0) {
       return true;
     }
 
-    count--;
+    counter--;
     return false;
   }
+
+  void reset() { counter = count; }
 };
 
 // [min, max]

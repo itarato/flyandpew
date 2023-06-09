@@ -28,6 +28,8 @@ struct Player : Entity {
   int health{PLAYER_HEALTH};
   BulletManager bullet_manager{};
   PhaseTicker fire_phase_ticker{{4, 1}};
+  bool shield{false};
+  Countdown shield_countdown{420};
 
   Player() : Entity() {}
 
@@ -41,6 +43,8 @@ struct Player : Entity {
     active = true;
     health = PLAYER_HEALTH;
     bullet_manager.reset();
+    shield = false;
+    shield_countdown.reset();
   }
 
   void hit() {
@@ -48,6 +52,11 @@ struct Player : Entity {
     if (health <= 0) {
       deactivate();
     }
+  }
+
+  void shield_up() {
+    shield = true;
+    shield_countdown.reset();
   }
 
   void update() {
@@ -92,6 +101,12 @@ struct Player : Entity {
       remove_inactive(bullets);
     }
 
+    {  // Shield.
+      if (shield_countdown.tick()) {
+        shield = false;
+      }
+    }
+
     fire_phase_ticker.tick();
   }
 
@@ -101,6 +116,12 @@ struct Player : Entity {
     }
 
     Entity::draw();
+
+    if (shield) {
+      Texture2D *shield_texture = &resource_manager.textures[RESRC_SHIELD];
+      DrawTexture(*shield_texture, pos.x - (shield_texture->width / 2),
+                  pos.y - (shield_texture->height / 2), WHITE);
+    }
 
     const Texture2D *exhaust_texture =
         &resource_manager.textures[RESRC_EFFECT_EXHAUST];
