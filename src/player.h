@@ -110,8 +110,8 @@ struct Player : Entity {
     fire_phase_ticker.tick();
   }
 
-  void draw() {
-    for (auto &fire : bullets) {
+  void draw() const {
+    for (const auto &fire : bullets) {
       fire.get()->draw();
     }
 

@@ -117,8 +117,8 @@ struct UpgradeManager : UIElement {
     remove_inactive(upgrades);
   }
 
-  void draw() {
-    for (auto& upgrade : upgrades) {
+  void draw() const {
+    for (const auto& upgrade : upgrades) {
       upgrade->draw();
     }
   }

@@ -151,16 +151,15 @@ struct EnemyManager {
     remove_inactive(enemies);
     remove_inactive(bullets);
   }
-
-  void draw() {
-    for (auto& enemy : enemies) {
+  void draw() const {
+    for (const auto& enemy : enemies) {
       if (enemy->is_static) enemy.get()->draw();
     }
-    for (auto& enemy : enemies) {
+    for (const auto& enemy : enemies) {
       if (!enemy->is_static) enemy.get()->draw();
     }
 
-    for (auto& bullet : bullets) {
+    for (const auto& bullet : bullets) {
       bullet->draw();
     }
   }

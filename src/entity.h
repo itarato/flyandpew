@@ -14,7 +14,7 @@ struct UIElement {
   UIElement(){};
   ~UIElement(){};
 
-  virtual void draw() = 0;
+  virtual void draw() const = 0;
   virtual void update() = 0;
 
   void deactivate() { active = false; }
@@ -41,7 +41,7 @@ struct Entity : UIElement {
     return CheckCollisionRecs(frame(), other->frame());
   }
 
-  virtual void draw() {
+  virtual void draw() const {
     if (texture) {
       DrawTexture(*texture, pos.x - (dim.x / 2), pos.y - (dim.y / 2), WHITE);
     } else {

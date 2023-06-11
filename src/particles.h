@@ -39,8 +39,8 @@ struct Firework : UIElement {
     }
   }
 
-  void draw() {
-    for (auto& particle : particles) {
+  void draw() const {
+    for (const auto& particle : particles) {
       DrawRectangleV(particle.pos, particle.dim, color);
     }
   }

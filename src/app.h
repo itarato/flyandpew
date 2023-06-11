@@ -72,7 +72,7 @@ struct App {
     remove_inactive(ui_elements);
   }
 
-  void draw() {
+  void draw() const {
     player.draw();
 
     enemy_manager.draw();
