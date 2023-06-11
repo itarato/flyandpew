@@ -6,9 +6,10 @@ BIN=main
 SRC=$(wildcard src/*.cpp)
 OBJ=$(addsuffix .o,$(basename $(SRC)))
 
+all: CXXFLAGS += -O3
 all: executable
 
-debug: CXXFLAGS += -DDEBUG -g
+debug: CXXFLAGS += -g -O0
 debug: executable
 
 executable: $(OBJ)
