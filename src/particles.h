@@ -7,19 +7,21 @@
 
 using namespace std;
 
-#define PARTICLE_FIREWORK_SLOWDOWN 0.96
+#define PARTICLE_SIZE 8
+#define PARTICLE_FIREWORK_SLOWDOWN 0.95
+#define PARTICLE_LIFETIME 60
 
 struct Firework : UIElement {
   vector<Entity> particles{};
-  Countdown countdown{42};
-  const int count{16};
-  const float max_v{4.0};
+  Countdown countdown{PARTICLE_LIFETIME};
+  const int count{48};
+  const float max_v{8.0};
   Color color;
 
   Firework(Vector2 pos, Color color) : color(color) {
     for (int i = 0; i < count; i++) {
       particles.emplace_back(
-          Vector2{4.0, 4.0}, pos,
+          Vector2{PARTICLE_SIZE, PARTICLE_SIZE}, pos,
           Vector2{randf(-max_v, max_v), randf(-max_v, max_v)});
     }
   }
@@ -33,7 +35,6 @@ struct Firework : UIElement {
       particle.v.x *= PARTICLE_FIREWORK_SLOWDOWN;
       particle.v.y *= PARTICLE_FIREWORK_SLOWDOWN;
     }
-
     if (countdown.tick()) {
       deactivate();
     }
@@ -41,7 +42,10 @@ struct Firework : UIElement {
 
   void draw() const {
     for (const auto& particle : particles) {
-      DrawRectangleV(particle.pos, particle.dim, color);
+      Color alpha_color =
+          ColorAlpha(color, static_cast<float>(countdown.counter + 30) /
+                                static_cast<float>(PARTICLE_LIFETIME + 30));
+      DrawRectangleV(particle.pos, particle.dim, alpha_color);
     }
   }
 };

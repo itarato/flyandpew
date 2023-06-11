@@ -45,7 +45,7 @@ struct ModTicker : Ticker {
   ModTicker(int mod) : Ticker(), mod(mod) {}
 
   bool tick_and_test() {
-    if (tick() == (uint64_t)mod) {
+    if (tick() == static_cast<uint64_t>(mod)) {
       reset();
       return true;
     } else {
