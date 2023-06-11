@@ -1,13 +1,12 @@
 #pragma once
 
-#include <raylib.h>
-
 #include <vector>
 
 #include "config.h"
 #include "enemy.h"
 #include "particles.h"
 #include "player.h"
+#include "raylib.h"
 #include "resource.h"
 #include "upgrade.h"
 

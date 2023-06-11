@@ -1,12 +1,11 @@
 #pragma once
 
-#include <raylib.h>
-#include <raymath.h>
-
 #include <map>
 #include <optional>
 
 #include "entity.h"
+#include "raylib.h"
+#include "raymath.h"
 #include "resource.h"
 #include "util.h"
 
@@ -61,7 +60,7 @@ struct SmallLaserFire : Fire {
 struct Rocket : Fire {
   const int hit_rad{256};
 
-  Rocket(Vector2 pos) : Fire(Vector2(8, 16), pos, Vector2(0, -5)) {
+  Rocket(Vector2 pos) : Fire(Vector2{8, 16}, pos, Vector2{0, -5}) {
     setTexture(RESRC_LASER_RED_BIG);
   }
   ~Rocket() {}
@@ -102,9 +101,9 @@ struct BulletManager {
         break;
       case FIRE_DOUBLE:
         container->emplace_back(
-            make_unique<SmallLaserFire>(Vector2Add(pos, Vector2(45.0, 0.0))));
+            make_unique<SmallLaserFire>(Vector2Add(pos, Vector2{45.0, 0.0})));
         container->emplace_back(
-            make_unique<SmallLaserFire>(Vector2Add(pos, Vector2(-45.0, 0.0))));
+            make_unique<SmallLaserFire>(Vector2Add(pos, Vector2{-45.0, 0.0})));
         break;
       default:
         TraceLog(LOG_ERROR, "Invalid fire type");

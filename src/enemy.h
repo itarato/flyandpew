@@ -1,7 +1,5 @@
 #pragma once
 
-#include <raylib.h>
-
 #include <algorithm>
 #include <memory>
 #include <vector>
@@ -10,6 +8,7 @@
 #include "entity.h"
 #include "fire.h"
 #include "move.h"
+#include "raylib.h"
 #include "resource.h"
 #include "util.h"
 
@@ -47,7 +46,7 @@ struct Enemy : Entity {
     if (randf() < fire_chance) {
       // TODO: Add fire (to app).
       bullet_collector->emplace_back(
-          make_unique<SmallLaserFire>(pos, Vector2(0.0, FIRE_DEFAULT_SPEED)));
+          make_unique<SmallLaserFire>(pos, Vector2{0.0, FIRE_DEFAULT_SPEED}));
     }
   }
 
@@ -109,7 +108,9 @@ struct BaseEnemy : Enemy {
 };
 
 struct BossEnemy : Enemy {
-  BossEnemy() : Enemy(Vector2(GetScreenWidth() / 2, 0), nullptr) {}
+  BossEnemy()
+      : Enemy(Vector2{static_cast<float>(GetScreenWidth()) / 2.0f, 0},
+              nullptr) {}
   ~BossEnemy() {}
 };
 
@@ -136,8 +137,8 @@ struct EnemyManager {
     }
 
     if (randf() < 0.001) {
-      enemies.emplace_back(
-          make_unique<Meteor>(Vector2(randi(0, GetScreenWidth()), 0.0)));
+      enemies.emplace_back(make_unique<Meteor>(
+          Vector2{static_cast<float>(randi(0, GetScreenWidth())), 0.0}));
     }
 
     for (auto& enemy : enemies) {

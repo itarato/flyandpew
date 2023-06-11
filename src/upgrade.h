@@ -1,13 +1,12 @@
 #pragma once
 
-#include <raylib.h>
-
 #include <memory>
 #include <vector>
 
 #include "entity.h"
 #include "fire.h"
 #include "player.h"
+#include "raylib.h"
 #include "util.h"
 
 using namespace std;
@@ -32,13 +31,13 @@ struct Upgrade : Entity {
   int v2;
 
   Upgrade(int type, Vector2 pos)
-      : Entity(Vector2(30.0, 30.0), pos, Vector2{0.0, UPGRADE_SPEED}),
+      : Entity(Vector2{30.0, 30.0}, pos, Vector2{0.0, UPGRADE_SPEED}),
         type(type) {
     init();
   }
 
   Upgrade(int type, Vector2 pos, int v1, int v2)
-      : Entity(Vector2(30.0, 30.0), pos, Vector2{0.0, UPGRADE_SPEED}),
+      : Entity(Vector2{30.0, 30.0}, pos, Vector2{0.0, UPGRADE_SPEED}),
         type(type),
         v1(v1),
         v2(v2) {
@@ -91,17 +90,20 @@ struct UpgradeManager : UIElement {
             // we would just iterate through -> so adding a new Fire type
             // automatically enables the upgrade.
             upgrades.emplace_back(make_unique<Upgrade>(
-                UPGRADE_TYPE_BULLET, Vector2(randi(0, GetScreenWidth()), 0.0),
+                UPGRADE_TYPE_BULLET,
+                Vector2{static_cast<float>(randi(0, GetScreenWidth())), 0.0},
                 FIRE_ROCKET, 2));
             break;
           case UPGRADE_TYPE_HEALTH:
             upgrades.emplace_back(make_unique<Upgrade>(
-                UPGRADE_TYPE_HEALTH, Vector2(randi(0, GetScreenWidth()), 0.0),
-                1, 0));
+                UPGRADE_TYPE_HEALTH,
+                Vector2{static_cast<float>(randi(0, GetScreenWidth())), 0.0}, 1,
+                0));
             break;
           case UPGRADE_TYPE_SHIELD:
             upgrades.emplace_back(make_unique<Upgrade>(
-                UPGRADE_TYPE_SHIELD, Vector2(randi(0, GetScreenWidth()), 0.0)));
+                UPGRADE_TYPE_SHIELD,
+                Vector2{static_cast<float>(randi(0, GetScreenWidth())), 0.0}));
             break;
           default:
             TraceLog(LOG_ERROR, "Invalid upgrade type");

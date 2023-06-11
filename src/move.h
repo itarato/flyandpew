@@ -7,7 +7,7 @@
 
 struct Mover {
   Mover() {}
-  ~Mover() {}
+  virtual ~Mover() {}
 
   virtual void visit(Entity* entity) = 0;
 };

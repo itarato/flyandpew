@@ -1,9 +1,8 @@
 #pragma once
 
-#include <raylib.h>
-
 #include <string>
 
+#include "raylib.h"
 #include "resource.h"
 
 using namespace std;
@@ -12,7 +11,7 @@ struct UIElement {
   bool active{true};
 
   UIElement(){};
-  ~UIElement(){};
+  virtual ~UIElement(){};
 
   virtual void draw() const = 0;
   virtual void update() = 0;
