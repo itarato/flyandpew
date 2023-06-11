@@ -108,6 +108,11 @@ struct BaseEnemy : Enemy {
   ~BaseEnemy() {}
 };
 
+struct BossEnemy : Enemy {
+  BossEnemy() : Enemy(Vector2(GetScreenWidth() / 2, 0), nullptr) {}
+  ~BossEnemy() {}
+};
+
 struct EnemyManager {
   vector<unique_ptr<Enemy>> enemies{};
   Ticker ticker{};

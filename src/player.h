@@ -22,7 +22,7 @@ using namespace std;
 const char *fire_names[] = {"Mini pew", "Bim bam pew", "Double pew"};
 
 struct Player : Entity {
-  Input input{};
+  const Input input{};
   vector<unique_ptr<Fire>> bullets{};
   uint8_t fire_type{FIRE_BASIC};
   int health{PLAYER_HEALTH};
@@ -110,7 +110,7 @@ struct Player : Entity {
     fire_phase_ticker.tick();
   }
 
-  void draw() {
+  void draw() const s {
     for (auto &fire : bullets) {
       fire.get()->draw();
     }

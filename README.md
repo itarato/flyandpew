@@ -9,7 +9,7 @@ Space shooter.
 <!-- - meteors -->
 <!-- - multiple enemy -->
 <!-- - shield -->
-- arcade enemy movement (left down right down ...)
+<!-- - arcade enemy movement (left down right down ...) -->
 - enemy life bars
 - player hurt animation (shake or something)
 - bosses
