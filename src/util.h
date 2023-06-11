@@ -55,7 +55,7 @@ struct ModTicker : Ticker {
 };
 
 struct PhaseTicker : Ticker {
-  const vector<int> phases;
+  vector<int> phases;
   int phase{0};
 
   PhaseTicker(vector<int> phases) : Ticker(), phases(phases) {}
