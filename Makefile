@@ -1,13 +1,13 @@
 UNAME_S := $(shell uname -s)
 
-CXXFLAGS=-std=c++2a -Wall -pedantic -Wformat
+CXXFLAGS = -std=c++2a -Wall -pedantic -Wformat
 
 ifeq ($(UNAME_S),Linux)
-	LIBS=-lraylib -lGL -lm -lpthread -ldl -lrt -lX11
+	LIBS = -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
 endif
 ifeq ($(UNAME_S),Darwin)
-	LIBS=-lm -lpthread -ldl -framework IOKit -framework Cocoa -framework OpenGL `pkg-config --libs --cflags raylib`
-	CXXFLAGS+=-I./lib
+	LIBS = -lm -lpthread -ldl -framework IOKit -framework Cocoa -framework OpenGL `pkg-config --libs --cflags raylib`
+	CXXFLAGS += -I./lib
 endif
 
 BIN=main

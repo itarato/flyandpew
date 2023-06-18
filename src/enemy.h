@@ -22,6 +22,9 @@ struct Enemy : Entity {
   bool is_static{false};
   float fire_chance{0.0};
 
+  Enemy(const Enemy&) = delete;
+  Enemy(Enemy&&) = default;
+
   Enemy(Vector2 pos, unique_ptr<Mover> _mover)
       : Entity(Vector2{60.0, 40.0}, pos, Vector2{0.0, 1.0}) {
     mover.swap(_mover);
@@ -120,6 +123,8 @@ struct EnemyManager {
   vector<unique_ptr<Fire>> bullets{};
 
   EnemyManager() {}
+  EnemyManager(const EnemyManager&) = delete;
+  EnemyManager(EnemyManager&&) = delete;
 
   void reset() {
     enemies.clear();

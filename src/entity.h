@@ -11,6 +11,9 @@ struct UIElement {
   bool active{true};
 
   UIElement(){};
+  UIElement(const UIElement&) = delete;
+  UIElement(UIElement&&) = default;
+
   virtual ~UIElement(){};
 
   virtual void draw() const = 0;
@@ -26,6 +29,9 @@ struct Entity : UIElement {
   Texture2D* texture{nullptr};
 
   Entity() {}
+  Entity(const Entity&) = delete;
+  Entity(Entity&&) = default;
+
   Entity(Vector2 dim) : dim(dim) {}
   Entity(Vector2 dim, Vector2 pos, Vector2 v) : dim(dim), pos(pos), v(v) {}
 

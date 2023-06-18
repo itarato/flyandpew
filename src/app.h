@@ -20,6 +20,8 @@ struct App {
   UpgradeManager upgrade_manager{};
 
   App() {}
+  App(const App&) = delete;
+  App(App&&) = delete;
 
   void init() {
     int win_flags = FLAG_VSYNC_HINT | FLAG_MSAA_4X_HINT;
