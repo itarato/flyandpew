@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cmath>
 #include <vector>
 
 #include "entity.h"
@@ -9,7 +10,7 @@ using namespace std;
 
 #define PARTICLE_SIZE 8
 #define PARTICLE_FIREWORK_SLOWDOWN 0.95
-#define PARTICLE_LIFETIME 60
+#define PARTICLE_LIFETIME 45
 
 struct Firework : UIElement {
   vector<Entity> particles{};
@@ -43,8 +44,9 @@ struct Firework : UIElement {
   void draw() const {
     for (const auto& particle : particles) {
       Color alpha_color =
-          ColorAlpha(color, static_cast<float>(countdown.counter + 30) /
-                                static_cast<float>(PARTICLE_LIFETIME + 30));
+          ColorAlpha(color, sinf((static_cast<float>(countdown.counter) /
+                                  static_cast<float>(PARTICLE_LIFETIME))) *
+                                PI / 2.0);
       DrawRectangleV(particle.pos, particle.dim, alpha_color);
     }
   }

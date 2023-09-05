@@ -11,9 +11,10 @@ using namespace std;
 int main() {
   srand(time(nullptr));
 
-  config.win_w = 1280;
-  config.win_h = 1280;
-  config.fps = 120;
+  config.win_w = 1900;
+  config.win_h = 1000;
+  config.fps = 60;
+  config.input_mode_mouse_on = true;
 
   App app = App();
   app.init();

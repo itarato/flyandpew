@@ -61,19 +61,30 @@ struct Player : Entity {
 
   void update() {
     {  // Movement.
-      const float ix = input.x();
-      if (ix != 0.0) {
-        v.x += ix * PLAYER_VELOCITY * config.v();
+      if (config.input_mode_mouse_on) {
+        v.x = 0.0;
+        pos.x = GetMousePosition().x;
       } else {
-        v.x = 0;
+        const float ix = input.x();
+        if (ix != 0.0) {
+          v.x += ix * PLAYER_VELOCITY * config.v();
+        } else {
+          v.x = 0;
+        }
       }
 
-      const float iy = input.y();
-      if (iy != 0.0) {
-        v.y += iy * PLAYER_VELOCITY * config.v();
+      if (config.input_mode_mouse_on) {
+        v.y = 0.0;
+        pos.y = GetMousePosition().y;
       } else {
-        v.y = 0;
+        const float iy = input.y();
+        if (iy != 0.0) {
+          v.y += iy * PLAYER_VELOCITY * config.v();
+        } else {
+          v.y = 0;
+        }
       }
+
       bound(&v.x, -PLAYER_MAX_V * config.v(), PLAYER_MAX_V * config.v());
       bound(&v.y, -PLAYER_MAX_V * config.v(), PLAYER_MAX_V * config.v());
 
